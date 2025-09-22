@@ -13,18 +13,18 @@ public final class Calculator extends javax.swing.JFrame {
     private String currentOperand;
     private String previousOperand;
     private String operation;
-    
-    private static Calculator instance ;
+
+    private static Calculator instance;
     private int x, y;
 
-    public static Calculator getInstance () {
-        if ( instance == null ) {
-             instance = new Calculator () ;
+    public static Calculator getInstance() {
+        if (instance == null) {
+            instance = new Calculator();
         }
-        return instance ;
+        return instance;
     }
-     
-    public Calculator() {
+
+    private Calculator() {
         initComponents();
         getContentPane().setSize(400, 700);
         this.clear();
@@ -116,39 +116,30 @@ public final class Calculator extends javax.swing.JFrame {
         this.updateDisplay();
     }
 
+    //updated compute method for factory method pattern
     public void compute() {
-        float computation;
         if (this.currentOperand.equals("") || this.previousOperand.equals("")) {
             return;
         }
 
         float curr = Float.parseFloat(this.currentOperand);
         float prev = Float.parseFloat(this.previousOperand);
-        if (Float.isNaN(curr) || Float.isNaN(prev)) {
+
+        Operation op = OperationFactory.getOperation(this.operation);
+        if (op == null) {
             return;
         }
 
-        switch (this.operation) {
-            case "+" ->
-                computation = prev + curr;
-            case "-" ->
-                computation = prev - curr;
-            case "×" ->
-                computation = prev * curr;
-            case "÷" -> {
-                if (curr == 0) {
-                    this.clear();
-                    this.currentOperand = "Error";
-                    return;
-                }
-                computation = prev / curr;
-            }
-            default -> {
-                return;
-            }
+        try {
+            float computation = op.execute(prev, curr);
+            this.currentOperand = (computation - (int) computation) != 0
+                    ? Float.toString(computation)
+                    : Integer.toString((int) computation);
+        } catch (ArithmeticException e) {
+            this.clear();
+            this.currentOperand = "Error";
         }
 
-        this.currentOperand = (computation - (int) computation) != 0 ? Float.toString(computation) : Integer.toString((int) computation);
         this.previousOperand = "";
         this.operation = "";
     }
@@ -636,7 +627,7 @@ public final class Calculator extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCloseMouseEntered
 
     private void btnCloseMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseExited
-        btnClose.setBackground(new Color(21,20,22));
+        btnClose.setBackground(new Color(21, 20, 22));
         btnClose.setForeground(Color.WHITE);
     }//GEN-LAST:event_btnCloseMouseExited
 
@@ -645,7 +636,7 @@ public final class Calculator extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMiniMouseEntered
 
     private void btnMiniMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMiniMouseExited
-        btnMini.setBackground(new Color(21,20,22));
+        btnMini.setBackground(new Color(21, 20, 22));
     }//GEN-LAST:event_btnMiniMouseExited
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
