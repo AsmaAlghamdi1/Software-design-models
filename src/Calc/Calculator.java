@@ -13,9 +13,17 @@ public final class Calculator extends javax.swing.JFrame {
     private String currentOperand;
     private String previousOperand;
     private String operation;
-
+    
+    private static Calculator instance ;
     private int x, y;
 
+    public static Calculator getInstance () {
+        if ( instance == null ) {
+             instance = new Calculator () ;
+        }
+        return instance ;
+    }
+     
     public Calculator() {
         initComponents();
         getContentPane().setSize(400, 700);
