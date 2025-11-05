@@ -9,7 +9,7 @@ package Calc;
  * Applied Design Patterns:
  * 1) Singleton: to ensures only one Calculator instance exists.
  * 2) Factory Method: to creates operation objects (+, -, ×, ÷) instead of using switch.
- * 3) Facade: provides a simple interface to the calculator system.
+ * 3) 
  * 
  * names:
  * Asma Alghamdi
@@ -20,7 +20,7 @@ package Calc;
 public class App {
 
     public static void main(String[] args) {
-        CalculatorFacade facade = new CalculatorFacade();
-        facade.showCalculator();  // Opens the calculator GUI through Facade
+        Calculator calc1 = Calculator.getInstance();
+        calc1.setVisible(true);
     }
 }

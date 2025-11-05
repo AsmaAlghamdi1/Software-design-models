@@ -5,6 +5,8 @@
         <group>
             <file>file:/C:/Users/pca/Documents/NetBeansProjects/Software-design-models/src/Calc/Calculator.java</file>
             <file>file:/C:/Users/pca/Documents/NetBeansProjects/Software-design-models/src/Calc/App.java</file>
+            <file>file:/C:/Users/pca/Documents/NetBeansProjects/Software-design-models/src/Calc/Operation.java</file>
+            <file>file:/C:/Users/pca/Documents/NetBeansProjects/Software-design-models/src/Calc/OperationFactory.java</file>
             <file>file:/C:/Users/pca/Documents/NetBeansProjects/Software-design-models/src/Calc/CalculatorFacade.java</file>
         </group>
     </open-files>

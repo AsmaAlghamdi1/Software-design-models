@@ -10,9 +10,12 @@ import javax.swing.JButton;
  */
 public final class Calculator extends javax.swing.JFrame {
 
-    private String currentOperand;
-    private String previousOperand;
-    private String operation;
+//    private String currentOperand;
+//    private String previousOperand;
+//    private String operation;
+    // NEW: Field to hold the entire expression (e.g., "5 + 3 - 2")
+    private String currentExpression;
+    private String lastInputType;
 
     private static Calculator instance;
     private int x, y;
@@ -72,81 +75,176 @@ public final class Calculator extends javax.swing.JFrame {
     }
 
     public void clear() {
-        this.currentOperand = "";
-        this.previousOperand = "";
-        this.operation = "";
+        this.currentExpression = "";
+        this.lastInputType = "";
         this.updateDisplay();
     }
 
     public void appendNumber(String number) {
-        if (this.currentOperand.equals("0") && number.equals("0")) {
+        // If the last input was '=', start a new expression
+        if (this.lastInputType.equals("equal")) {
+            this.currentExpression = "";
+        }
+
+        // Basic number/dot logic (simplified)
+        if (this.currentExpression.endsWith(".") && number.equals(".")) {
             return;
         }
 
-        if (number.equals(".") && this.currentOperand.contains(".")) {
-            return;
+        // Check if we are starting a new number or continuing one
+        if (this.lastInputType.equals("operator")) {
+            // Add a space before the new number starts
+            this.currentExpression += " ";
         }
 
-        if (this.currentOperand.equals("0")
-                && !number.equals("0")
-                && !number.equals(".")) {
-            this.currentOperand = "";
-        }
-
-        this.currentOperand += number;
+        this.currentExpression += number;
+        this.lastInputType = "number";
         this.updateDisplay();
     }
 
+    // Calculator.java (Modified chooseOperation)
     public void chooseOperation(String operation) {
-        if (this.currentOperand.equals("") && !this.previousOperand.equals("")) {
-            this.operation = operation;
-            this.updateDisplay();
-        }
-        if (this.currentOperand.equals("")) {
+        if (this.currentExpression.isEmpty() && !operation.equals("-")) { // Allow leading negative sign
             return;
         }
 
-        if (!this.previousOperand.equals("")) {
-            this.compute();
+        // If last input was an operator, replace it (e.g., changing 5+ to 5-)
+        if (this.lastInputType.equals("operator")) {
+            // Find the last operator and remove it (simplified for basic use)
+            String lastChar = this.currentExpression.substring(this.currentExpression.length() - 1);
+            if (lastChar.matches("[+\\-×÷]")) {
+                this.currentExpression = this.currentExpression.substring(0, this.currentExpression.length() - 1);
+            }
         }
 
-        this.operation = operation;
-        this.previousOperand = this.currentOperand;
-        this.currentOperand = "";
+        // Add spaces around the operator for easier parsing later
+        this.currentExpression += " " + operation + " ";
+        this.lastInputType = "operator";
         this.updateDisplay();
     }
 
-    //updated compute method for factory method pattern
-    public void compute() {
-        if (this.currentOperand.equals("") || this.previousOperand.equals("")) {
-            return;
+//    //updated compute method for factory method pattern
+//    public void compute() {
+//        if (this.currentOperand.equals("") || this.previousOperand.equals("")) {
+//            return;
+//        }
+//
+//        float curr = Float.parseFloat(this.currentOperand);
+//        float prev = Float.parseFloat(this.previousOperand);
+//
+//        Operation op = OperationFactory.getOperation(this.operation);
+//        if (op == null) {
+//            return;
+//        }
+//
+//        try {
+//            float computation = op.execute(prev, curr);
+//            this.currentOperand = (computation - (int) computation) != 0
+//                    ? Float.toString(computation)
+//                    : Integer.toString((int) computation);
+//        } catch (ArithmeticException e) {
+//            this.clear();
+//            this.currentOperand = "Error";
+//        }
+//
+//        this.previousOperand = "";
+//        this.operation = "";
+//    }
+    // Calculator.java (Modified buildExpressionTree method)
+    private Operation buildExpressionTree(String expression) {
+        // 1. Clean the expression and split by one or more spaces
+        // \\s+ handles multiple spaces and ensures no empty strings are created
+        String[] parts = expression.trim().split("\\s+");
+
+        // Check if the expression is empty or only whitespace was present
+        if (parts.length == 0 || (parts.length == 1 && parts[0].isEmpty())) {
+            return null; // Nothing to calculate
         }
 
-        float curr = Float.parseFloat(this.currentOperand);
-        float prev = Float.parseFloat(this.previousOperand);
-
-        Operation op = OperationFactory.getOperation(this.operation);
-        if (op == null) {
-            return;
-        }
-
+        // ... (The rest of the logic remains correct, as it now safely operates 
+        // on a clean 'parts' array with no empty strings.)
+        // Start with the first number as the initial result
+        Operation currentOp;
         try {
-            float computation = op.execute(prev, curr);
-            this.currentOperand = (computation - (int) computation) != 0
+            currentOp = new NumberExpression(Float.parseFloat(parts[0]));
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Invalid starting number: " + parts[0]);
+        }
+
+        // Iterate through the rest of the parts: Operator, Number, Operator, Number...
+        for (int i = 1; i < parts.length - 1; i += 2) {
+            String operator = parts[i];
+
+            // Check if the input is truncated (ends with an operator)
+            if (i + 1 >= parts.length) {
+                throw new NumberFormatException("Missing operand after operator: " + operator);
+            }
+
+            float nextVal;
+            try {
+                nextVal = Float.parseFloat(parts[i + 1]);
+            } catch (NumberFormatException e) {
+                throw new NumberFormatException("Invalid number encountered: " + parts[i + 1]);
+            }
+
+            Operation nextRight = new NumberExpression(nextVal);
+            currentOp = OperationFactory.getOperation(operator, currentOp, nextRight);
+
+            if (currentOp == null) {
+                throw new IllegalArgumentException("Unsupported operator: " + operator);
+            }
+        }
+
+        return currentOp;
+    }
+
+// MODIFIED: compute() method (triggered by '=')
+    // Calculator.java (Modified compute() method)
+    public void compute() {
+        // 1. Check if the expression is meaningful before proceeding
+        if (this.currentExpression.isEmpty() || this.lastInputType.equals("operator")) {
+            // Prevent calculation if there's no input or it ends with an operator
+            return;
+        }
+
+        String expressionToCalculate = this.currentExpression;
+
+        // 1. Build the Composite Tree
+        try {
+            Operation rootOp = buildExpressionTree(expressionToCalculate);
+
+            if (rootOp == null) {
+                // This case handles when the user clears the screen and presses '='
+                this.clear();
+                return;
+            }
+
+            // 2. Execute the entire composite tree.
+            float computation = rootOp.execute(0, 0);
+
+            // 3. Store the result and prepare for a new input (rest of the logic)
+            this.currentExpression = (computation - (int) computation) != 0
                     ? Float.toString(computation)
                     : Integer.toString((int) computation);
-        } catch (ArithmeticException e) {
-            this.clear();
-            this.currentOperand = "Error";
-        }
 
-        this.previousOperand = "";
-        this.operation = "";
+            previous.setText(expressionToCalculate + " = ");
+            current.setText(this.currentExpression);
+
+            this.lastInputType = "equal";
+
+        } catch (ArithmeticException | IllegalArgumentException e) {
+            // Catch all calculation/parsing/format errors and display "Error"
+            this.clear();
+            this.currentExpression = "Error";
+            this.updateDisplay();
+        }
     }
 
     public void updateDisplay() {
-        current.setText(this.currentOperand);
-        previous.setText(previousOperand + " " + this.operation);
+        // We only display the ongoing expression in the 'current' field
+        current.setText(this.currentExpression);
+        // 'previous' field can be used for the result or cleared
+        previous.setText("");
     }
 
     @SuppressWarnings("unchecked")
@@ -576,7 +674,43 @@ public final class Calculator extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDotActionPerformed
-        appendNumber((this.currentOperand.isBlank() ? "0." : "."));
+        // 1. If starting a new expression after '=', clear it
+        if (this.lastInputType.equals("equal")) {
+            this.currentExpression = "";
+            this.lastInputType = "number";
+        }
+
+        // --- FIX START ---
+        String lastPart;
+        if (this.currentExpression.isEmpty()) {
+            lastPart = "";
+        } else {
+            // Use a negative lookahead regex to split and exclude empty strings resulting from multiple spaces
+            String[] parts = this.currentExpression.trim().split("\\s+");
+            lastPart = parts[parts.length - 1];
+        }
+        // --- FIX END ---
+
+        // 3. Prevent adding a dot if the current number already contains one
+        if (lastPart.contains(".")) {
+            return;
+        }
+
+        // 4. If the last input was an operator, start the new number with "0."
+        if (this.lastInputType.equals("operator")) {
+            this.currentExpression += " 0.";
+            this.lastInputType = "number";
+        } // 5. If the expression is empty, start with "0."
+        else if (this.currentExpression.isEmpty()) {
+            this.currentExpression = "0.";
+            this.lastInputType = "number";
+        } // 6. Otherwise, just append the dot.
+        else {
+            this.currentExpression += ".";
+            this.lastInputType = "number";
+        }
+
+        this.updateDisplay();
     }//GEN-LAST:event_btnDotActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -584,10 +718,31 @@ public final class Calculator extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
-        if (!this.currentOperand.equals("")) {
-            this.currentOperand = this.currentOperand.substring(0, this.currentOperand.length() - 1);
-            this.updateDisplay();
+        if (this.currentExpression.isEmpty()) {
+            return;
         }
+
+        // 1. Delete the last character
+        // Use trim() later to clean up if the deleted character was a space
+        this.currentExpression = this.currentExpression.substring(0, this.currentExpression.length() - 1).trim();
+
+        // 2. Re-evaluate the last input type after deletion
+        if (this.currentExpression.isEmpty()) {
+            this.lastInputType = "";
+        } else {
+            // Retrieve the last character after trimming
+            String lastChar = this.currentExpression.substring(this.currentExpression.length() - 1);
+
+            // --- FIX START: Check if the expression is left on an operator ---
+            if (lastChar.matches("[+\\-×÷]")) {
+                this.lastInputType = "operator";
+            } else {
+                this.lastInputType = "number";
+            }
+            // --- FIX END ---
+        }
+
+        this.updateDisplay();
     }//GEN-LAST:event_btnDelActionPerformed
 
     private void btnPlusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlusActionPerformed
@@ -608,16 +763,40 @@ public final class Calculator extends javax.swing.JFrame {
 
     private void btnEqualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEqualActionPerformed
         this.compute();
-        this.updateDisplay();
-        if (this.currentOperand.equals("Error"))
-            this.currentOperand = "";
     }//GEN-LAST:event_btnEqualActionPerformed
 
     private void btnPlusSubActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlusSubActionPerformed
-        if (!this.currentOperand.isBlank()) {
-            float tmp = -Float.parseFloat(this.currentOperand);
-            this.currentOperand = (tmp - (int) tmp) != 0 ? Float.toString(tmp) : Integer.toString((int) tmp);
+        if (this.currentExpression.isEmpty() || this.lastInputType.equals("operator")) {
+            return;
+        }
+
+        // Split the expression to find the current number being typed
+        String[] parts = this.currentExpression.trim().split(" ");
+        if (parts.length == 0) {
+            return;
+        }
+
+        String currentNumStr = parts[parts.length - 1];
+
+        try {
+            float tmp = Float.parseFloat(currentNumStr);
+            tmp = -tmp; // Flip the sign
+
+            // Reformat the number string (float or integer)
+            String newNumStr = (tmp - (int) tmp) != 0
+                    ? Float.toString(tmp)
+                    : Integer.toString((int) tmp);
+
+            // Replace the last number in the expression with the new signed number
+            // Note: This relies on simple string manipulation; a dedicated parser would be safer.
+            this.currentExpression = this.currentExpression.substring(0, this.currentExpression.length() - currentNumStr.length());
+            this.currentExpression += newNumStr;
+
             this.updateDisplay();
+            this.lastInputType = "number";
+        } catch (NumberFormatException e) {
+            // Should not happen if the logic is correct, but safe to catch
+            System.err.println("Error changing sign on: " + currentNumStr);
         }
     }//GEN-LAST:event_btnPlusSubActionPerformed
 
