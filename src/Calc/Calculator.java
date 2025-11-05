@@ -14,9 +14,9 @@ public final class Calculator extends javax.swing.JFrame {
 //    private String previousOperand;
 //    private String operation;
     // NEW: Field to hold the entire expression (e.g., "5 + 3 - 2")
-    private String currentExpression;
+      private String currentExpression;
     private String lastInputType;
-
+    private boolean clearOnNextInput = false;
     private static Calculator instance;
     private int x, y;
 
@@ -26,7 +26,9 @@ public final class Calculator extends javax.swing.JFrame {
         }
         return instance;
     }
-
+    public void setClearOnNextInput(boolean value) {
+            this.clearOnNextInput = value;
+      }
     private Calculator() {
         initComponents();
         getContentPane().setSize(400, 700);
@@ -75,32 +77,32 @@ public final class Calculator extends javax.swing.JFrame {
     }
 
     public void clear() {
+    this.currentExpression = "";
+    this.lastInputType = "";
+    this.clearOnNextInput = false; 
+    this.updateDisplay();
+}
+    public void appendNumber(String number) {
+    
+    if (clearOnNextInput) {
         this.currentExpression = "";
         this.lastInputType = "";
-        this.updateDisplay();
+        clearOnNextInput = false;
     }
 
-    public void appendNumber(String number) {
-        // If the last input was '=', start a new expression
-        if (this.lastInputType.equals("equal")) {
-            this.currentExpression = "";
-        }
-
-        // Basic number/dot logic (simplified)
-        if (this.currentExpression.endsWith(".") && number.equals(".")) {
-            return;
-        }
-
-        // Check if we are starting a new number or continuing one
-        if (this.lastInputType.equals("operator")) {
-            // Add a space before the new number starts
-            this.currentExpression += " ";
-        }
-
-        this.currentExpression += number;
-        this.lastInputType = "number";
-        this.updateDisplay();
+    if (this.currentExpression.endsWith(".") && number.equals(".")) {
+        return;
     }
+
+    if (this.lastInputType.equals("operator")) {
+       
+        this.currentExpression += " ";
+    }
+
+    this.currentExpression += number;
+    this.lastInputType = "number";
+    this.updateDisplay();
+}
 
     // Calculator.java (Modified chooseOperation)
     public void chooseOperation(String operation) {
@@ -200,45 +202,56 @@ public final class Calculator extends javax.swing.JFrame {
 
 // MODIFIED: compute() method (triggered by '=')
     // Calculator.java (Modified compute() method)
-    public void compute() {
-        // 1. Check if the expression is meaningful before proceeding
-        if (this.currentExpression.isEmpty() || this.lastInputType.equals("operator")) {
-            // Prevent calculation if there's no input or it ends with an operator
+   public void compute() {
+    // 1. Check if the expression is meaningful before proceeding
+    if (this.currentExpression.isEmpty() || this.lastInputType.equals("operator")) {
+        // Prevent calculation if there's no input or it ends with an operator
+        return;
+    }
+
+    String expressionToCalculate = this.currentExpression;
+
+    // 1. Build the Composite Tree
+    try {
+        Operation rootOp = buildExpressionTree(expressionToCalculate);
+
+        if (rootOp == null) {
+            // This case handles when the user clears the screen and presses '='
+            this.clear();
             return;
         }
 
-        String expressionToCalculate = this.currentExpression;
+        // 2. Execute the entire composite tree.
+        Operation decorated = rootOp;
 
-        // 1. Build the Composite Tree
-        try {
-            Operation rootOp = buildExpressionTree(expressionToCalculate);
+      decorated = new HistoryDecorator(decorated, expressionToCalculate);
+      decorated = new AutoClearDecorator(decorated, this);
 
-            if (rootOp == null) {
-                // This case handles when the user clears the screen and presses '='
-                this.clear();
-                return;
-            }
+float computation = decorated.execute(0, 0);
+        // 3. Store the result and prepare for a new input (rest of the logic)
+        this.currentExpression = (computation - (int) computation) != 0
+                ? Float.toString(computation)
+                : Integer.toString((int) computation);
 
-            // 2. Execute the entire composite tree.
-            float computation = rootOp.execute(0, 0);
+        previous.setText(expressionToCalculate + " = ");
+        current.setText(this.currentExpression);
 
-            // 3. Store the result and prepare for a new input (rest of the logic)
-            this.currentExpression = (computation - (int) computation) != 0
-                    ? Float.toString(computation)
-                    : Integer.toString((int) computation);
+        this.lastInputType = "equal";
 
-            previous.setText(expressionToCalculate + " = ");
-            current.setText(this.currentExpression);
-
-            this.lastInputType = "equal";
-
-        } catch (ArithmeticException | IllegalArgumentException e) {
-            // Catch all calculation/parsing/format errors and display "Error"
-            this.clear();
-            this.currentExpression = "Error";
-            this.updateDisplay();
+        System.out.println("===== HISTORY =====");
+        for (String h : HistoryDecorator.getHistory()) {
+            System.out.println(h);
         }
+        System.out.println("================================");
+        // ======================================================
+
+    } catch (ArithmeticException | IllegalArgumentException e) {
+        // Catch all calculation/parsing/format errors and display "Error"
+        this.clear();
+        this.currentExpression = "Error";
+        this.updateDisplay();
     }
+}
 
     public void updateDisplay() {
         // We only display the ongoing expression in the 'current' field
