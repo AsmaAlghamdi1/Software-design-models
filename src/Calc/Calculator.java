@@ -200,35 +200,28 @@ public final class Calculator extends javax.swing.JFrame {
         return currentOp;
     }
 
-// MODIFIED: compute() method (triggered by '=')
-    // Calculator.java (Modified compute() method)
+
    public void compute() {
-    // 1. Check if the expression is meaningful before proceeding
     if (this.currentExpression.isEmpty() || this.lastInputType.equals("operator")) {
-        // Prevent calculation if there's no input or it ends with an operator
         return;
     }
 
     String expressionToCalculate = this.currentExpression;
 
-    // 1. Build the Composite Tree
     try {
-        Operation rootOp = buildExpressionTree(expressionToCalculate);
+        Operation rootOp = ExpressionParser.parse(expressionToCalculate);
 
         if (rootOp == null) {
-            // This case handles when the user clears the screen and presses '='
             this.clear();
             return;
         }
 
-        // 2. Execute the entire composite tree.
         Operation decorated = rootOp;
 
-      decorated = new HistoryDecorator(decorated, expressionToCalculate);
-      decorated = new AutoClearDecorator(decorated, this);
+        decorated = new HistoryDecorator(decorated, expressionToCalculate);
+        decorated = new AutoClearDecorator(decorated, this);
+        float computation = decorated.execute(0, 0);
 
-float computation = decorated.execute(0, 0);
-        // 3. Store the result and prepare for a new input (rest of the logic)
         this.currentExpression = (computation - (int) computation) != 0
                 ? Float.toString(computation)
                 : Integer.toString((int) computation);
@@ -238,20 +231,13 @@ float computation = decorated.execute(0, 0);
 
         this.lastInputType = "equal";
 
-        System.out.println("===== HISTORY =====");
-        for (String h : HistoryDecorator.getHistory()) {
-            System.out.println(h);
-        }
-        System.out.println("================================");
-        // ======================================================
-
     } catch (ArithmeticException | IllegalArgumentException e) {
-        // Catch all calculation/parsing/format errors and display "Error"
         this.clear();
         this.currentExpression = "Error";
         this.updateDisplay();
     }
 }
+
 
     public void updateDisplay() {
         // We only display the ongoing expression in the 'current' field

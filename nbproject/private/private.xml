@@ -3,11 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/pca/Documents/NetBeansProjects/Software-design-models/src/Calc/Calculator.java</file>
-            <file>file:/C:/Users/pca/Documents/NetBeansProjects/Software-design-models/src/Calc/App.java</file>
-            <file>file:/C:/Users/pca/Documents/NetBeansProjects/Software-design-models/src/Calc/Operation.java</file>
-            <file>file:/C:/Users/pca/Documents/NetBeansProjects/Software-design-models/src/Calc/OperationFactory.java</file>
-            <file>file:/C:/Users/pca/Documents/NetBeansProjects/Software-design-models/src/Calc/CalculatorFacade.java</file>
+            <file>file:/C:/Users/Dell/OneDrive/المستندات/NetBeansProjects/design_pattern%20project/Software-design-models/src/Calc/AddOperation.java</file>
+            <file>file:/C:/Users/Dell/OneDrive/المستندات/NetBeansProjects/design_pattern%20project/Software-design-models/src/Calc/App.java</file>
+            <file>file:/C:/Users/Dell/OneDrive/المستندات/NetBeansProjects/design_pattern%20project/Software-design-models/src/Calc/AutoClearDecorator.java</file>
+            <file>file:/C:/Users/Dell/OneDrive/المستندات/NetBeansProjects/design_pattern%20project/Software-design-models/src/Calc/Calculator.java</file>
+            <file>file:/C:/Users/Dell/OneDrive/المستندات/NetBeansProjects/design_pattern%20project/Software-design-models/src/Calc/Operation.java</file>
+            <file>file:/C:/Users/Dell/OneDrive/المستندات/NetBeansProjects/design_pattern%20project/Software-design-models/src/Calc/HistoryDecorator.java</file>
+            <file>file:/C:/Users/Dell/OneDrive/المستندات/NetBeansProjects/design_pattern%20project/Software-design-models/src/Calc/MultOperation.java</file>
+            <file>file:/C:/Users/Dell/OneDrive/المستندات/NetBeansProjects/design_pattern%20project/Software-design-models/src/Calc/SubOperation.java</file>
+            <file>file:/C:/Users/Dell/OneDrive/المستندات/NetBeansProjects/design_pattern%20project/Software-design-models/src/Calc/OperationDecorator.java</file>
+            <file>file:/C:/Users/Dell/OneDrive/المستندات/NetBeansProjects/design_pattern%20project/Software-design-models/src/Calc/DivOperation.java</file>
+            <file>file:/C:/Users/Dell/OneDrive/المستندات/NetBeansProjects/design_pattern%20project/Software-design-models/src/Calc/OperationFactory.java</file>
+            <file>file:/C:/Users/Dell/OneDrive/المستندات/NetBeansProjects/design_pattern%20project/Software-design-models/src/Calc/NumberExpression.java</file>
         </group>
     </open-files>
 </project-private>
