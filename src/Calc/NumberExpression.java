@@ -2,7 +2,6 @@
 package Calc;
 
 // Leaf Node: Represents a simple numeric value (operand)
-
 public class NumberExpression implements Operation {
     
     private final float value;

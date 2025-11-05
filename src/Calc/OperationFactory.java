@@ -5,7 +5,7 @@ public class OperationFactory {
     // Modification: Now accepts the two sub-expressions (operands)
     public static Operation getOperation(String operator, Operation left, Operation right) {
         return switch (operator) {
-            // New: Pass the sub-expressions to the operation constructors
+            // Pass the sub-expressions to the operation constructors
             case "+" -> new AddOperation(left, right);
             case "-" -> new SubOperation(left, right); 
             case "×" -> new MultOperation(left, right);

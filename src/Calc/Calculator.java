@@ -13,8 +13,9 @@ public final class Calculator extends javax.swing.JFrame {
 //    private String currentOperand;
 //    private String previousOperand;
 //    private String operation;
+    
     // NEW: Field to hold the entire expression (e.g., "5 + 3 - 2")
-      private String currentExpression;
+    private String currentExpression;
     private String lastInputType;
     private boolean clearOnNextInput = false;
     private static Calculator instance;
@@ -106,11 +107,10 @@ public final class Calculator extends javax.swing.JFrame {
 
     // Calculator.java (Modified chooseOperation)
     public void chooseOperation(String operation) {
-        if (this.currentExpression.isEmpty() && !operation.equals("-")) { // Allow leading negative sign
+        if (this.currentExpression.isEmpty() && !operation.equals("-")) {
             return;
         }
 
-        // If last input was an operator, replace it (e.g., changing 5+ to 5-)
         if (this.lastInputType.equals("operator")) {
             // Find the last operator and remove it (simplified for basic use)
             String lastChar = this.currentExpression.substring(this.currentExpression.length() - 1);
@@ -124,82 +124,6 @@ public final class Calculator extends javax.swing.JFrame {
         this.lastInputType = "operator";
         this.updateDisplay();
     }
-
-//    //updated compute method for factory method pattern
-//    public void compute() {
-//        if (this.currentOperand.equals("") || this.previousOperand.equals("")) {
-//            return;
-//        }
-//
-//        float curr = Float.parseFloat(this.currentOperand);
-//        float prev = Float.parseFloat(this.previousOperand);
-//
-//        Operation op = OperationFactory.getOperation(this.operation);
-//        if (op == null) {
-//            return;
-//        }
-//
-//        try {
-//            float computation = op.execute(prev, curr);
-//            this.currentOperand = (computation - (int) computation) != 0
-//                    ? Float.toString(computation)
-//                    : Integer.toString((int) computation);
-//        } catch (ArithmeticException e) {
-//            this.clear();
-//            this.currentOperand = "Error";
-//        }
-//
-//        this.previousOperand = "";
-//        this.operation = "";
-//    }
-    // Calculator.java (Modified buildExpressionTree method)
-    private Operation buildExpressionTree(String expression) {
-        // 1. Clean the expression and split by one or more spaces
-        // \\s+ handles multiple spaces and ensures no empty strings are created
-        String[] parts = expression.trim().split("\\s+");
-
-        // Check if the expression is empty or only whitespace was present
-        if (parts.length == 0 || (parts.length == 1 && parts[0].isEmpty())) {
-            return null; // Nothing to calculate
-        }
-
-        // ... (The rest of the logic remains correct, as it now safely operates 
-        // on a clean 'parts' array with no empty strings.)
-        // Start with the first number as the initial result
-        Operation currentOp;
-        try {
-            currentOp = new NumberExpression(Float.parseFloat(parts[0]));
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException("Invalid starting number: " + parts[0]);
-        }
-
-        // Iterate through the rest of the parts: Operator, Number, Operator, Number...
-        for (int i = 1; i < parts.length - 1; i += 2) {
-            String operator = parts[i];
-
-            // Check if the input is truncated (ends with an operator)
-            if (i + 1 >= parts.length) {
-                throw new NumberFormatException("Missing operand after operator: " + operator);
-            }
-
-            float nextVal;
-            try {
-                nextVal = Float.parseFloat(parts[i + 1]);
-            } catch (NumberFormatException e) {
-                throw new NumberFormatException("Invalid number encountered: " + parts[i + 1]);
-            }
-
-            Operation nextRight = new NumberExpression(nextVal);
-            currentOp = OperationFactory.getOperation(operator, currentOp, nextRight);
-
-            if (currentOp == null) {
-                throw new IllegalArgumentException("Unsupported operator: " + operator);
-            }
-        }
-
-        return currentOp;
-    }
-
 
    public void compute() {
     if (this.currentExpression.isEmpty() || this.lastInputType.equals("operator")) {
