@@ -155,13 +155,18 @@ public final class Calculator extends javax.swing.JFrame {
 
         this.lastInputType = "equal";
 
+        System.out.println("===== HISTORY =====");
+        for (String h : HistoryDecorator.getHistory()) {
+            System.out.println(h);
+        }
+        System.out.println("===================");
+
     } catch (ArithmeticException | IllegalArgumentException e) {
         this.clear();
         this.currentExpression = "Error";
         this.updateDisplay();
     }
 }
-
 
     public void updateDisplay() {
         // We only display the ongoing expression in the 'current' field

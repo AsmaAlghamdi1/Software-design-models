@@ -20,7 +20,11 @@ public class HistoryDecorator extends OperationDecorator {
     public float execute(float a, float b) {
         float result = super.execute(a, b);
 
-        String entry = expression + " = " + result;
+        String normalizedExpression = expression
+        .replace("×", "*")
+        .replace("÷", "/");
+
+         String entry = normalizedExpression + " = " + result;
         history.add(entry);
 
         return result;
