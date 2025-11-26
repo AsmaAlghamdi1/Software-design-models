@@ -10,7 +10,7 @@ public class OperationFactory {
             case "-" -> new SubOperation(left, right); 
             case "×" -> new MultOperation(left, right);
             case "÷" -> new DivOperation(left, right);
-            default -> null;
+            default -> throw new IllegalArgumentException("Unknown operator: " + operator);// افضل من Null 
         };
     }
     

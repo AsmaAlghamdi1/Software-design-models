@@ -4,10 +4,13 @@ package Calc;
 public class DivOperation implements Operation {
     private final Operation left;
     private final Operation right;
+    private final OperationStrategy strategy;// هذا ضفته جديد
 
     public DivOperation(Operation left, Operation right) {
         this.left = left;
         this.right = right;
+        
+        this.strategy = new DivStrategy();
     }
     
     @Override
@@ -18,6 +21,6 @@ public class DivOperation implements Operation {
         if (valB == 0) {
             throw new ArithmeticException("Division by zero");
         }
-        return valA / valB;
+        return strategy.execute(valA, valB);
     }
 }

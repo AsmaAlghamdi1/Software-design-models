@@ -5,11 +5,14 @@ public class AddOperation implements Operation {
     
     private final Operation left;
     private final Operation right;
+    private final OperationStrategy strategy;// هذا ضفته جديد
 
     // Constructor Accepts two Operation objects
     public AddOperation(Operation left, Operation right) {
         this.left = left;
         this.right = right;
+        
+        this.strategy = new AddStrategy();
     }
     
     @Override
@@ -23,6 +26,6 @@ public class AddOperation implements Operation {
         float valB = right.execute(0, 0);
         
         // Perform the addition on the results
-        return valA + valB;
+        return strategy.execute(valA , valB);
     }
 }
