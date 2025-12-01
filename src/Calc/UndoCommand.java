@@ -11,7 +11,7 @@ public class UndoCommand implements Command {
 
     @Override
     public void execute() {
-        calculator.undoLast();  // يرجع خطوة واحدة
+        calculator.undoLast();  
     }
 
     @Override
