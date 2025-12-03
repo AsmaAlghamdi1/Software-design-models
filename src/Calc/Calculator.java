@@ -349,7 +349,8 @@ public final class Calculator extends javax.swing.JFrame {
         btnUndo.setBackground(new java.awt.Color(41, 39, 44));
         btnUndo.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
         btnUndo.setForeground(new java.awt.Color(255, 255, 255));
-        btnUndo.setText("←");
+        btnUndo.setText("Undo");
+        btnUndo.setActionCommand("Undo");
         btnUndo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 39, 44)));
         btnUndo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUndo.setFocusPainted(false);
@@ -361,7 +362,7 @@ public final class Calculator extends javax.swing.JFrame {
                 btnUndoActionPerformed(evt);
             }
         });
-        buttonsPanel.add(btnUndo, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 60, -1));
+        buttonsPanel.add(btnUndo, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 70, 70));
 
         btnClear.setBackground(new java.awt.Color(41, 39, 44));
         btnClear.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
@@ -378,7 +379,7 @@ public final class Calculator extends javax.swing.JFrame {
                 btnClearActionPerformed(evt);
             }
         });
-        buttonsPanel.add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 60, -1));
+        buttonsPanel.add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 20, 90, -1));
 
         btnDiv.setBackground(new java.awt.Color(41, 39, 44));
         btnDiv.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
@@ -395,7 +396,7 @@ public final class Calculator extends javax.swing.JFrame {
                 btnDivActionPerformed(evt);
             }
         });
-        buttonsPanel.add(btnDiv, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, 60, -1));
+        buttonsPanel.add(btnDiv, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 90, 60, -1));
 
         btnMult.setBackground(new java.awt.Color(41, 39, 44));
         btnMult.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
@@ -465,7 +466,7 @@ public final class Calculator extends javax.swing.JFrame {
                 btnSubActionPerformed(evt);
             }
         });
-        buttonsPanel.add(btnSub, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 90, 60, -1));
+        buttonsPanel.add(btnSub, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 160, 60, -1));
 
         btn4.setBackground(new java.awt.Color(21, 20, 22));
         btn4.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
@@ -518,7 +519,7 @@ public final class Calculator extends javax.swing.JFrame {
                 btnPlusActionPerformed(evt);
             }
         });
-        buttonsPanel.add(btnPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 160, 60, -1));
+        buttonsPanel.add(btnPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 220, 60, 80));
 
         btn1.setBackground(new java.awt.Color(21, 20, 22));
         btn1.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
@@ -625,17 +626,18 @@ public final class Calculator extends javax.swing.JFrame {
         buttonsPanel.add(btnEqual, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 300, 60, -1));
 
         btnRedo.setBackground(new java.awt.Color(41, 39, 44));
-        btnRedo.setFont(new java.awt.Font("Segoe UI Emoji", 0, 14)); // NOI18N
+        btnRedo.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
         btnRedo.setForeground(new java.awt.Color(255, 255, 255));
-        btnRedo.setText("↻ ");
+        btnRedo.setText("Redo");
         btnRedo.setActionCommand("Redo");
-        btnRedo.setBorderPainted(false);
+        btnRedo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnRedo.setFocusPainted(false);
         btnRedo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRedoActionPerformed(evt);
             }
         });
-        buttonsPanel.add(btnRedo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 50, 70));
+        buttonsPanel.add(btnRedo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 70, 70));
         btnRedo.getAccessibleContext().setAccessibleName("Redo");
 
         app.add(buttonsPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 320, 390));

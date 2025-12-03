@@ -153,7 +153,8 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&#x2190;"/>
+                <Property name="text" type="java.lang.String" value="Undo"/>
+                <Property name="actionCommand" type="java.lang.String" value="Undo"/>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                     <LineBorder>
@@ -181,7 +182,7 @@
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="60" y="20" width="60" height="-1"/>
+                  <AbsoluteConstraints x="80" y="20" width="70" height="70"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -224,7 +225,7 @@
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="120" y="20" width="60" height="-1"/>
+                  <AbsoluteConstraints x="150" y="20" width="90" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -267,7 +268,7 @@
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="180" y="20" width="60" height="-1"/>
+                  <AbsoluteConstraints x="240" y="90" width="60" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -473,7 +474,7 @@
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="240" y="90" width="60" height="-1"/>
+                  <AbsoluteConstraints x="240" y="160" width="60" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -636,7 +637,7 @@
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="240" y="160" width="60" height="-1"/>
+                  <AbsoluteConstraints x="240" y="220" width="60" height="80"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -938,14 +939,19 @@
                   <Color blue="2c" green="27" red="29" type="rgb"/>
                 </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI Emoji" size="14" style="0"/>
+                  <Font name="Century Gothic" size="18" style="1"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&#x21bb; "/>
+                <Property name="text" type="java.lang.String" value="Redo"/>
                 <Property name="actionCommand" type="java.lang.String" value="Redo"/>
-                <Property name="borderPainted" type="boolean" value="false"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                    <LineBorder/>
+                  </Border>
+                </Property>
+                <Property name="focusPainted" type="boolean" value="false"/>
               </Properties>
               <AccessibilityProperties>
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Redo"/>
@@ -955,7 +961,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="10" y="20" width="50" height="70"/>
+                  <AbsoluteConstraints x="10" y="20" width="70" height="70"/>
                 </Constraint>
               </Constraints>
             </Component>
