@@ -4,9 +4,11 @@ package Calc;
 
 public class EqualCommand implements Command {
 
+ 
     private Calculator calculator;
-    private String previousExpression;
-    private String previousResult;
+
+    private CalculatorMemento before;
+    private CalculatorMemento after;
 
     public EqualCommand(Calculator calculator) {
         this.calculator = calculator;
@@ -14,14 +16,18 @@ public class EqualCommand implements Command {
 
     @Override
     public void execute() {
-        previousExpression = calculator.getCurrentExpression();
+        before = calculator.saveState();
         calculator.compute();
-        previousResult = calculator.getCurrentExpression();
+        after = calculator.saveState();
         calculator.pushHistory(this);
     }
 
     @Override
     public void undo() {
-        calculator.setCurrentExpression(previousExpression);
+        calculator.restoreState(before);
+    }
+
+    public void redo() {
+        calculator.restoreState(after);
     }
 }

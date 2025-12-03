@@ -5,7 +5,9 @@ public class OperatorCommand implements Command {
 
     private Calculator calculator;
     private String operator;
-    private String previousExpression;
+
+    private CalculatorMemento before;
+    private CalculatorMemento after;
 
     public OperatorCommand(Calculator calculator, String operator) {
         this.calculator = calculator;
@@ -14,13 +16,18 @@ public class OperatorCommand implements Command {
 
     @Override
     public void execute() {
-        previousExpression = calculator.getCurrentExpression();
+        before = calculator.saveState();
         calculator.chooseOperation(operator);
+        after = calculator.saveState();
         calculator.pushHistory(this);
     }
 
     @Override
     public void undo() {
-        calculator.setCurrentExpression(previousExpression);
+        calculator.restoreState(before);
+    }
+
+    public void redo() {
+        calculator.restoreState(after);
     }
 }

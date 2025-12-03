@@ -19,6 +19,7 @@ public final class Calculator extends javax.swing.JFrame {
     private static Calculator instance;
     private int x, y;
 
+
     public static Calculator getInstance() {
         if (instance == null) {
             instance = new Calculator();
@@ -26,6 +27,18 @@ public final class Calculator extends javax.swing.JFrame {
         return instance;
     }
 
+    public CalculatorMemento saveState() {
+    return new CalculatorMemento(currentExpression, lastInputType, clearOnNextInput);
+}
+
+    public void restoreState(CalculatorMemento m) {
+    this.currentExpression = m.getExpression();
+    this.lastInputType = m.getLastInputType();
+    this.clearOnNextInput = m.getClearOnNextInput();
+    updateDisplay();
+}
+    
+    
     public void setClearOnNextInput(boolean value) {
         this.clearOnNextInput = value;
     }
@@ -40,8 +53,14 @@ public final class Calculator extends javax.swing.JFrame {
     //NEW
    private Stack<Command> history = new Stack<>();
    private Stack<Command> redoStack = new Stack<>();
+   
+   
+  
+
    private boolean isRedoing = false;
    private Map<JButton, Command> commandMap = new HashMap<>();
+   
+
 
     public void pushHistory(Command c) {
     history.push(c);
@@ -61,25 +80,32 @@ public final class Calculator extends javax.swing.JFrame {
 
    public void undoLast() {
     if (!history.isEmpty()) {
-        Command last = history.pop();
-        
-        redoStack.push(last);
-
-        last.undo();
-        updateDisplay();
+        Command cmd = history.pop();
+        cmd.undo();
+        redoStack.push(cmd);
     }
 }
    
    public void redoLast() {
-    if (!redoStack.isEmpty()) {
+     if (!redoStack.isEmpty()) {
         Command cmd = redoStack.pop();
 
-        isRedoing = true;
-        cmd.execute();   
-        isRedoing = false;
+        if (cmd instanceof NumberCommand) {
+            ((NumberCommand) cmd).redo();
+        } else if (cmd instanceof OperatorCommand) {
+            ((OperatorCommand) cmd).redo();
+        } else if (cmd instanceof EqualCommand) {
+            ((EqualCommand) cmd).redo();
+        } else if (cmd instanceof ClearCommand) {
+            ((ClearCommand) cmd).redo();
+        }
 
-        updateDisplay();
+        history.push(cmd);
     }
+}
+   
+   public void clearRedoHistory() {
+    redoStack.clear();
 }
 
     //end of new

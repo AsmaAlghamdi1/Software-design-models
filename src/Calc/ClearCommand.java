@@ -3,8 +3,11 @@ package Calc;
 
 public class ClearCommand implements Command {
 
+
     private Calculator calculator;
-    private String previousExpression;
+
+    private CalculatorMemento before;
+    private CalculatorMemento after;
 
     public ClearCommand(Calculator calculator) {
         this.calculator = calculator;
@@ -12,13 +15,18 @@ public class ClearCommand implements Command {
 
     @Override
     public void execute() {
-        previousExpression = calculator.getCurrentExpression();
+        before = calculator.saveState();
         calculator.clear();
+        after = calculator.saveState();
         calculator.pushHistory(this);
     }
 
     @Override
     public void undo() {
-        calculator.setCurrentExpression(previousExpression);
+        calculator.restoreState(before);
+    }
+
+    public void redo() {
+        calculator.restoreState(after);
     }
 }

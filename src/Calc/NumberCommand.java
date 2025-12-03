@@ -5,7 +5,9 @@ public class NumberCommand implements Command {
 
     private Calculator calculator;
     private String number;
-    private String previousExpression;
+
+    private CalculatorMemento before;
+    private CalculatorMemento after;
 
     public NumberCommand(Calculator calculator, String number) {
         this.calculator = calculator;
@@ -14,13 +16,18 @@ public class NumberCommand implements Command {
 
     @Override
     public void execute() {
-        previousExpression = calculator.getCurrentExpression();
+        before = calculator.saveState();
         calculator.appendNumber(number);
+        after = calculator.saveState();
         calculator.pushHistory(this);
     }
 
     @Override
     public void undo() {
-        calculator.setCurrentExpression(previousExpression);
+        calculator.restoreState(before);
+    }
+
+    public void redo() {
+        calculator.restoreState(after);
     }
 }
