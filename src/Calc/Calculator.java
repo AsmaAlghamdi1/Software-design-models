@@ -80,22 +80,13 @@ public final class Calculator extends javax.swing.JFrame {
     }
 
     public void redoLast() {
-        if (!redoStack.isEmpty()) {
-            Command cmd = redoStack.pop();
-
-            if (cmd instanceof NumberCommand) {
-                ((NumberCommand) cmd).redo();
-            } else if (cmd instanceof OperatorCommand) {
-                ((OperatorCommand) cmd).redo();
-            } else if (cmd instanceof EqualCommand) {
-                ((EqualCommand) cmd).redo();
-            } else if (cmd instanceof ClearCommand) {
-                ((ClearCommand) cmd).redo();
-            }
-
-            history.push(cmd);
-        }
+    if (!redoStack.isEmpty()) {
+        Command cmd = redoStack.pop();
+        cmd.redo();      
+        history.push(cmd);
     }
+}
+
 
     public void clearRedoHistory() {
         redoStack.clear();

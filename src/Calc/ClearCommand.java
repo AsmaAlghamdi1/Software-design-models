@@ -1,32 +1,14 @@
 
 package Calc;
 
-public class ClearCommand implements Command {
-
-
-    private Calculator calculator;
-
-    private CalculatorMemento before;
-    private CalculatorMemento after;
+public class ClearCommand extends StatefulCommand {
 
     public ClearCommand(Calculator calculator) {
-        this.calculator = calculator;
+        super(calculator);
     }
 
     @Override
-    public void execute() {
-        before = calculator.saveState();
+    protected void doExecute() {
         calculator.clear();
-        after = calculator.saveState();
-        calculator.pushHistory(this);
-    }
-
-    @Override
-    public void undo() {
-        calculator.restoreState(before);
-    }
-
-    public void redo() {
-        calculator.restoreState(after);
     }
 }

@@ -17,7 +17,7 @@ package Calc;
  * names:
  * Asma Alghamdi
  * Ebtehal Alzahrani
- * Joud Bahjali
+ * Joud Bahkali
  */
 
 public class App {

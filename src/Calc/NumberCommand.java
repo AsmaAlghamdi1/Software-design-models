@@ -1,33 +1,17 @@
 
 package Calc;
 
-public class NumberCommand implements Command {
+public class NumberCommand extends StatefulCommand {
 
-    private Calculator calculator;
     private String number;
 
-    private CalculatorMemento before;
-    private CalculatorMemento after;
-
     public NumberCommand(Calculator calculator, String number) {
-        this.calculator = calculator;
+        super(calculator);
         this.number = number;
     }
 
     @Override
-    public void execute() {
-        before = calculator.saveState();
+    protected void doExecute() {
         calculator.appendNumber(number);
-        after = calculator.saveState();
-        calculator.pushHistory(this);
-    }
-
-    @Override
-    public void undo() {
-        calculator.restoreState(before);
-    }
-
-    public void redo() {
-        calculator.restoreState(after);
     }
 }
