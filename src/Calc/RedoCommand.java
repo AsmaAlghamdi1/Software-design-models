@@ -1,13 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package Calc;
 
-/**
- *
- * @author Dell
- */
 public class RedoCommand implements Command {
 
     private Calculator calculator;
@@ -22,8 +15,9 @@ public class RedoCommand implements Command {
     }
 
     @Override
-    public void undo() {
-       
-    }
+    public void undo() {}
+    
+    @Override
+    public void redo() {}
 }
 

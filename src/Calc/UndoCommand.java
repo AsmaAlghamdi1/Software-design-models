@@ -15,7 +15,8 @@ public class UndoCommand implements Command {
     }
 
     @Override
-    public void undo() {
-        // Undo of Undo not needed
-    }
+    public void undo() {}
+    
+    @Override
+    public void redo() {}
 }
